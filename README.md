@@ -4,7 +4,7 @@ User enters their current address, and the application shows the five nearest co
 ```
 Введите свой адрес: Красная площадь
 Ваши координаты:  ['37.621202', '55.753544']
- * Serving Flask app 'map'
+   * Serving Flask app 'map'
    * Debug mode: off
 WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
    * Running on all addresses (0.0.0.0)
