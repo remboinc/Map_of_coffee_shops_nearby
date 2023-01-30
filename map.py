@@ -1,5 +1,4 @@
 import json
-from pprint import pprint
 import requests
 from geopy import distance
 import folium
@@ -13,7 +12,6 @@ def read_map():
 
 def create_map(coordinates, cafe_and_coordinates_full):
     sorted_cafes = sorted(cafe_and_coordinates_full, key=find_nearest_cafes)[:5]
-    pprint(sorted_cafes)
     map = folium.Map(location=coordinates)
     for cafe in sorted_cafes:
         tooltip = cafe["cafe"]
@@ -75,7 +73,6 @@ def find_nearest_cafes(cafe_and_coordinates_full):
 def main():
     apikey = '103d5e3e-7687-426c-b485-60bbb516fb73'
     address = input('Введите свой адрес: ')
-    print(f'Ваши координаты: ', fetch_coordinates(apikey, address))
     cafe_and_coordinates = read_file()
     coordinates = fetch_coordinates(apikey, address)
     cafe_and_coordinates_full = get_full_list(cafe_and_coordinates, coordinates)
