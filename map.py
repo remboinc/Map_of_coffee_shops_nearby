@@ -1,8 +1,10 @@
 import json
+import os
 import requests
 from geopy import distance
 import folium
 from flask import Flask
+from dotenv import load_dotenv
 
 
 def read_map():
@@ -34,13 +36,12 @@ def fetch_coordinates(apikey, address):
     if not found_places:
         return None
     most_relevant = found_places[0]
-    lon, lat = most_relevant['GeoObject']['Point']['pos'].split(" ")
-    coordinates = lon, lat
+    coordinates = most_relevant['GeoObject']['Point']['pos'].split(" ")
     return coordinates
 
 
 def read_file():
-    with open("coffee.json", "r", encoding="CP1251") as maps_file:
+    with open("Map_of_coffee_shops_nearby/coffee.json", "r", encoding="CP1251") as maps_file:
         file_contents = maps_file.read()
         a = json.loads(file_contents)
         cafe_and_coordinates = []
@@ -52,9 +53,8 @@ def read_file():
             cafe = {'cafe': cafe_name for el in a}
             lat = {'lat': latitude for el in a}
             lon = {'lon': longitude for el in a}
-            cafe_and_coordinates.append({**cafe, **lat, **lon})
+            cafe_and_coordinates.append(cafe | lat | lon)
             x += 1
-        print(cafe_and_coordinates)
         return cafe_and_coordinates
 
 
@@ -64,7 +64,7 @@ def get_full_list(cafe_and_coordinates, coordinates):
         point_b = place['lon'], place['lat']
         distances = (distance.distance(coordinates, point_b).km)
         distances_ = {'distance': distances}
-        cafe_and_coordinates_full.append({**distances_, **place})
+        cafe_and_coordinates_full.append(distances_ | place)
     return cafe_and_coordinates_full
 
 
@@ -73,13 +73,13 @@ def find_nearest_cafes(cafe_and_coordinates_full):
 
 
 def main():
-    apikey = '103d5e3e-7687-426c-b485-60bbb516fb73'
+    load_dotenv()
+    apikey = os.getenv('APIKEY')
     address = input('Введите свой адрес: ')
     cafe_and_coordinates = read_file()
     coordinates = fetch_coordinates(apikey, address)
     cafe_and_coordinates_full = get_full_list(cafe_and_coordinates, coordinates)
     create_map(coordinates, cafe_and_coordinates_full)
-
     app = Flask(__name__)
     app.add_url_rule('/', 'map', read_map)
     app.run('0.0.0.0')
