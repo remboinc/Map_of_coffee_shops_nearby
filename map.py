@@ -34,7 +34,8 @@ def fetch_coordinates(apikey, address):
     if not found_places:
         return None
     most_relevant = found_places[0]
-    coordinates = most_relevant['GeoObject']['Point']['pos'].split(" ")
+    lon, lat = most_relevant['GeoObject']['Point']['pos'].split(" ")
+    coordinates = lon, lat
     return coordinates
 
 
@@ -53,6 +54,7 @@ def read_file():
             lon = {'lon': longitude for el in a}
             cafe_and_coordinates.append({**cafe, **lat, **lon})
             x += 1
+        print(cafe_and_coordinates)
         return cafe_and_coordinates
 
 
