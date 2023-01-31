@@ -53,7 +53,7 @@ def read_file():
             cafe = {'cafe': cafe_name for el in a}
             lat = {'lat': latitude for el in a}
             lon = {'lon': longitude for el in a}
-            cafe_and_coordinates.append(cafe | lat | lon)
+            cafe_and_coordinates.append({**cafe, **lat, **lon})
             x += 1
         return cafe_and_coordinates
 
@@ -64,7 +64,7 @@ def get_full_list(cafe_and_coordinates, coordinates):
         point_b = place['lon'], place['lat']
         distances = (distance.distance(coordinates, point_b).km)
         distances_ = {'distance': distances}
-        cafe_and_coordinates_full.append(distances_ | place)
+        cafe_and_coordinates_full.append({**distances_, **place})
     return cafe_and_coordinates_full
 
 
