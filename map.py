@@ -36,8 +36,8 @@ def fetch_coordinates(apikey, address):
     if not found_places:
         return None
     most_relevant = found_places[0]
-    coordinates = most_relevant['GeoObject']['Point']['pos'].split(" ")
-    return coordinates
+    lon, lat = most_relevant['GeoObject']['Point']['pos'].split(" ")
+    return lon, lat
 
 
 def read_file():
@@ -58,10 +58,11 @@ def read_file():
         return cafe_and_coordinates
 
 
-def get_full_list(cafe_and_coordinates, coordinates):
+def get_full_list(cafe_and_coordinates, lon, lat):
+    coordinates = lat, lon
     cafe_and_coordinates_full = []
     for place in cafe_and_coordinates:
-        point_b = place['lon'], place['lat']
+        point_b = place['lat'], place['lon']
         distances = (distance.distance(coordinates, point_b).km)
         distances_ = {'distance': distances}
         cafe_and_coordinates_full.append({**distances_, **place})
@@ -77,8 +78,9 @@ def main():
     apikey = os.getenv('APIKEY')
     address = input('Введите свой адрес: ')
     cafe_and_coordinates = read_file()
-    coordinates = fetch_coordinates(apikey, address)
-    cafe_and_coordinates_full = get_full_list(cafe_and_coordinates, coordinates)
+    lon, lat = fetch_coordinates(apikey, address)
+    coordinates = lat, lon
+    cafe_and_coordinates_full = get_full_list(cafe_and_coordinates, lon, lat)
     create_map(coordinates, cafe_and_coordinates_full)
     app = Flask(__name__)
     app.add_url_rule('/', 'map', read_map)
