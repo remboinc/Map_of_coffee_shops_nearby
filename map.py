@@ -59,7 +59,7 @@ def read_file():
 
 
 def get_full_list(cafe_and_coordinates, lon, lat):
-    coordinates = lat, lon
+    coordinates = lon, lat
     cafe_and_coordinates_full = []
     for place in cafe_and_coordinates:
         point_b = place['lat'], place['lon']
@@ -79,9 +79,9 @@ def main():
     address = input('Введите свой адрес: ')
     cafe_and_coordinates = read_file()
     lon, lat = fetch_coordinates(apikey, address)
-    coordinates = lat, lon
-    cafe_and_coordinates_full = get_full_list(cafe_and_coordinates, lon, lat)
-    create_map(coordinates, cafe_and_coordinates_full)
+    # coordinates = lat, lon
+    cafe_and_coordinates_full = get_full_list(cafe_and_coordinates, lat, lon)
+    create_map((lat, lon), cafe_and_coordinates_full)
     app = Flask(__name__)
     app.add_url_rule('/', 'map', read_map)
     app.run('0.0.0.0')
