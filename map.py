@@ -79,7 +79,6 @@ def main():
     address = input('Введите свой адрес: ')
     cafe_and_coordinates = read_file()
     lon, lat = fetch_coordinates(apikey, address)
-    # coordinates = lat, lon
     cafe_and_coordinates_full = get_full_list(cafe_and_coordinates, lat, lon)
     create_map((lat, lon), cafe_and_coordinates_full)
     app = Flask(__name__)
