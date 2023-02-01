@@ -41,7 +41,7 @@ def fetch_coordinates(apikey, address):
 
 
 def read_file():
-    with open("Map_of_coffee_shops_nearby/coffee.json", "r", encoding="CP1251") as maps_file:
+    with open("coffee.json", "r", encoding="CP1251") as maps_file:
         file_contents = maps_file.read()
         a = json.loads(file_contents)
         cafe_and_coordinates = []
